@@ -130,7 +130,7 @@ class PieceInfo {
 
     public int getEnd()
     {
-        return start + length;
+        return start + length - 1;
     }
     public void setStart(int start) {
         this.start = start;
