@@ -1,9 +1,23 @@
+import java.util.List;
+
 class PieceTable {
+
+    private List<Character> original_buffer;
+    private List<Character> additional_buffer_;
+    private String additional_buffer;
 
     private int NOE;
     private Piece list;
     private Piece end_list;
     private Piece current_piece;
+
+    public String getAdditional_buffer() {
+        return additional_buffer;
+    }
+
+    public void setAdditional_buffer(String additional_buffer) {
+        this.additional_buffer = additional_buffer;
+    }
 
     public void setCurrent_piece(Piece current_piece) {
         this.current_piece = current_piece;
@@ -114,6 +128,10 @@ class PieceInfo {
     private int length;
     private PieceType type;
 
+    public int getEnd()
+    {
+        return start + length;
+    }
     public void setStart(int start) {
         this.start = start;
     }

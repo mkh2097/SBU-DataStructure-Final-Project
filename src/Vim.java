@@ -44,6 +44,8 @@ public class Vim {
         PieceTable pieceTable = new PieceTable();
         StringBuilder stringBuilder = new StringBuilder();
         Scanner scanner = new Scanner(System.in);
+
+
         while (true) {
             if (vim_mode == Mode.command) {
                 String command = scanner.next();
@@ -97,29 +99,59 @@ public class Vim {
                 }
             } else if (vim_mode == Mode.insert) {
                 String input = scanner.next();
-                if (input.equals("esc")) {
-                    vim_mode = Mode.command;
-                } else if (input.equals(">")) {
-//                    if (pieceTable.getAdditional_buffer().length() > cursor) {
-                    cursor++;
-//                    }
-                } else if (input.equals("<")) {
-                    if (cursor > 0) {
-                        cursor--;
-                    }
-                } else {
+                switch (input) {
+                    case "esc":
+                        vim_mode = Mode.command;
+                        break;
+                    case ">":
+                        if (pieceTable.getAdditional_buffer().length() > cursor) {
+                            cursor++;
+                            if (cursor == pieceTable.getCurrent_piece().getData().getEnd()) {
+                                if (pieceTable.getCurrent_piece().getNext() != null) {
+                                    pieceTable.setCurrent_piece(pieceTable.getCurrent_piece().getNext());
+                                } else {
+                                    cursor = 0;
+                                }
+                            }
+                        }
 
-                    //String input_buffer = stringBuilder.append(input).append("\\d").toString();
+                        break;
+                    case "<":
+                        if (cursor > 0) {
+                            if (cursor == pieceTable.getCurrent_piece().getData().getStart()) {
+                                pieceTable.setCurrent_piece(pieceTable.getCurrent_piece().getPrevious());
+                            }
+                            cursor--;
+                        }
+                        break;
+                    default:
+                        //String input_buffer = stringBuilder.append(input).append("\\d").toString();
 //                    String input_buffer = stringBuilder.insert(cursor, input).toString();
 //                    pieceTable.setAdditional_buffer(input_buffer);
-                    //pieceTable.getAdditional_buffer() += input
+                        //pieceTable.getAdditional_buffer() += input
 
 
-                    PieceInfo pieceInfo = new PieceInfo(cursor, input.length(), PieceType.Added);
-                    Piece piece = new Piece(null, null, pieceInfo);
+                        PieceInfo pieceInfo = new PieceInfo(cursor, input.length(), PieceType.Added);
+                        Piece piece = new Piece(null, null, pieceInfo);
 //                    System.out.println(pieceTable.getCurrent_piece());
-                    Piece out = pieceTable.Insert(pieceTable.getCurrent_piece(), piece);
-                    pieceTable.setCurrent_piece(out);
+                        Piece out = pieceTable.Insert(pieceTable.getCurrent_piece(), piece);
+                        pieceTable.setCurrent_piece(out);
+
+                        input = input.replace("\\n", "\n");
+
+
+                        String pre = "";
+                        if (pieceTable.getAdditional_buffer() != null) {
+                            pre = pieceTable.getAdditional_buffer();
+                        }
+                        pieceTable.setAdditional_buffer(pre + input);
+                        cursor += input.length();
+
+
+
+//                        System.out.println(cursor);
+
+//                    pieceTable.getAdditional_buffer().add();
 
 //                    System.out.println(pieceTable.getCurrent_piece());
 //                    System.out.println(pieceTable.getCurrent_piece().getPrevious());
@@ -135,6 +167,7 @@ public class Vim {
 
 
 //                    System.out.println(pieceTable.getCurrent_piece());
+                        break;
                 }
 
 //                    pieceTable.setCurrent_piece(piece);
@@ -146,14 +179,15 @@ public class Vim {
 //                    pieceTable.getNodes().setSelectedNode(node);
 //                    Node<Piece> node = new Node<Piece>(pieceTable.getCurrentPiece());
 //                    pieceTable.getNodes().Retrieve(pieceTable.getCurrentPiece())
-                int ascii_newline = 10;
 
 //                    pieceTable.getNodes().add(piece);
-                cursor += input.length();
 
             } else if (vim_mode == Mode.statics) {
 
             }
+            System.out.println(cursor);
+            System.out.println(pieceTable.getAdditional_buffer().substring(0,cursor)+"*"+pieceTable.getAdditional_buffer().substring(cursor));
+
 
 
 //            for (int i = 0; i < pieceTable.getNodes().size(); i++) {
@@ -169,10 +203,10 @@ public class Vim {
 //            System.out.println(temp.getPrevious());
 //            System.out.println(temp.getNext());
             Piece temp = pieceTable.getCurrent_piece();
-            while (temp != null) {
-                System.out.println(temp.getData().getLength());
-                temp = temp.getPrevious();
-            }
+//            while (temp != null) {
+//                System.out.println(temp.getData().getLength());
+//                temp = temp.getPrevious();
+//            }
         }
     }
 }
