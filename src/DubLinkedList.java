@@ -57,12 +57,12 @@ class PieceTable {
             }
             position.setNext(q);
         } else {
-            q.setNext(list);
-            if (list != null) {
-                list.setPrevious(q);
+            q.setNext(list.getNext());
+            if (list.getNext() != null) {
+                list.getNext().setPrevious(q);
             }
             q.setPrevious(null);
-            list = q;
+            list.setNext(q);
         }
 
         if (q.getNext() == null) {
@@ -100,7 +100,7 @@ class PieceTable {
     }
 
     public Piece First() {
-        return list;
+        return list.getNext();
     }
 
     public Piece Next(Piece position) {
