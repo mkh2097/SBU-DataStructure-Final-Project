@@ -42,7 +42,7 @@ public class Vim {
         Mode vim_mode = Mode.insert; //
         int cursor = 0;
         PieceTable pieceTable = new PieceTable();
-        StringBuilder stringBuilder = new StringBuilder();
+        TrieTree trieTree = new TrieTree();
         Scanner scanner = new Scanner(System.in);
 
 
@@ -61,7 +61,16 @@ public class Vim {
                         vim_mode = Mode.statics;
                         break;
                     case ">":
-                        cursor = getCursor(cursor, pieceTable);
+                        cursor++;
+                        if (cursor >= pieceTable.getCurrent_piece().getData().getLength()) {
+                            if (pieceTable.getCurrent_piece().getNext() != null) {
+                                System.out.println(pieceTable.getCurrent_piece().getNext());
+                                pieceTable.setCurrent_piece(pieceTable.getCurrent_piece().getNext());
+                                cursor = 0;
+                            } else if (cursor != pieceTable.getCurrent_piece().getData().getLength()) {
+                                cursor--;
+                            }
+                        }
                         break;
                     case "<":
                         cursor--;
@@ -83,7 +92,6 @@ public class Vim {
                             tempCursor--;
                         }
                         else if (pieceTable.getAdditional_buffer().substring(start,end+1).charAt(tempCursor) == '\n') {
-                            System.out.println("khat");
                             tempCursor = tempCursor-2;
                         }
                         while (pieceTable.getAdditional_buffer().substring(start,end+1).charAt(tempCursor) != '\n'){
@@ -98,26 +106,72 @@ public class Vim {
                                     tempCursor++;
                                 }
                             }
-                            if (tempCursor == 0){
+                            if (tempCursor == 0 && pieceTable.getCurrent_piece().getPrevious() == null){
                                 tempCursor--;
                                 break;
                             }
                         }
                         cursor = tempCursor+1;
-
                         break;
                     case "$":
+                        int tempCursor2 = cursor;
+
+                        int start2 = pieceTable.getCurrent_piece().getData().getStart();
+                        int end2 = pieceTable.getCurrent_piece().getData().getEnd();
+
+//                        if (pieceTable.getCurrent_piece().getNext() == null && tempCursor2 == pieceTable.getCurrent_piece().getData().getLength() ){
+//                            tempCursor2++;
+//                        }
+//                        else if (pieceTable.getAdditional_buffer().substring(start2,end2+1).charAt(tempCursor2) == '\n') {
+//                            tempCursor2 = tempCursor2+2;
+//                        }
+
+                        while (pieceTable.getAdditional_buffer().substring(start2,end2+1).charAt(tempCursor2) != '\n') {
+                            tempCursor2++;
+                            if (tempCursor2 >= pieceTable.getCurrent_piece().getData().getLength()) {
+                                if (pieceTable.getCurrent_piece().getNext() != null) {
+                                    start2 = pieceTable.getCurrent_piece().getData().getStart();
+                                    end2 = pieceTable.getCurrent_piece().getData().getEnd();
+                                    pieceTable.setCurrent_piece(pieceTable.getCurrent_piece().getNext());
+                                    tempCursor2 = 0;
+                                } else if (tempCursor2 != pieceTable.getCurrent_piece().getData().getLength()) {
+                                    tempCursor2--;
+                                }
+
+                                if (pieceTable.getCurrent_piece().getNext() == null && pieceTable.getCurrent_piece().getPrevious() == null){
+                                    tempCursor2 += 2;
+                                    break;
+                                }
+                            }
+                        }
+                        cursor = tempCursor2 ;
+
                         break;
-                    case "b":
+                    case "bf":
                         cursor = 0;
                         break;
-                    case "e":
+                    case "ef":
                         cursor = pieceTable.getAdditional_buffer().length();
                         break;
                     case ":w":
                         break;
                     case ":b":
                         break;
+                    case ":dd":
+                        break;
+                    case ":D":
+                        break;
+                    case ":y":
+                        break;
+                    case ":p":
+                        break;
+                    case "/":
+                        String find = scanner.next();
+
+
+
+                    default:
+                        System.out.println("Command Not Found");
 
 
                 }
