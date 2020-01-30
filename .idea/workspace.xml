@@ -3,6 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="1e4e0f49-3b5a-42a5-be89-7262e74f0905" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/DS-Alternative/Piece.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/DS-Alternative/Piece.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/DS-Alternative/PieceInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/DS-Alternative/PieceInfo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/DS-Alternative/PieceTable.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/DS-Alternative/PieceTable.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/DS-Alternative/PieceType.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/DS-Alternative/PieceType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/DS-Alternative/Position.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/DS-Alternative/Position.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/DS-Alternative/Vim.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/DS-Alternative/Vim.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DubLinkedList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DubLinkedList.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Vim.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Vim.java" afterDir="false" />
     </list>
@@ -70,7 +76,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
