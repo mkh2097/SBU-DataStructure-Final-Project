@@ -99,6 +99,8 @@ public class Vim {
                 }
             } else if (vim_mode == Mode.insert) {
                 String input = scanner.next();
+                input = input.replace("\\n", "\n");
+
                 switch (input) {
                     case "esc":
                         vim_mode = Mode.command;
@@ -233,7 +235,6 @@ public class Vim {
 //                        out = pieceTable.Insert(pieceTable.getCurrent_piece(), piece);
 //                            pieceTable.setCurrent_piece(out);
 
-                        input = input.replace("\\n", "\n");
 
 
                         String pre = "";
