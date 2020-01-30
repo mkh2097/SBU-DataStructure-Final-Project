@@ -119,36 +119,21 @@ public class Vim {
                         pieceTable.setCurrent_piece(pieceTable.getEnd_list());
                         cursor = pieceTable.getCurrent_piece().getData().getLength();
                         break;
-                    case "w":
-                        int start3 = pieceTable.getCurrent_piece().getData().getStart();
-                        int end3 = pieceTable.getCurrent_piece().getData().getEnd();
-                        int tempCursor3 = cursor;
-
-//                        if (pieceTable.getCurrent_piece().getNext() == null && tempCursor3 == pieceTable.getCurrent_piece().getData().getLength() ){
-//                            tempCursor3--;
-//                        }
-//                        else if (pieceTable.getAdditional_buffer().substring(start3,end3+1).charAt(tempCursor3) == ' ') {
-//                            tempCursor3 = tempCursor3-2;
-//                        }
-
-                        while (pieceTable.getAdditional_buffer().substring(start3,end3+1).charAt(tempCursor3) != ' '){
-                            tempCursor3--;
-                            if (tempCursor3 < 0) {
-                                if (pieceTable.getCurrent_piece().getPrevious() != null) {
-                                    pieceTable.setCurrent_piece(pieceTable.getCurrent_piece().getPrevious());
-                                    start3 = pieceTable.getCurrent_piece().getData().getStart();
-                                    end3 = pieceTable.getCurrent_piece().getData().getEnd();
-                                    tempCursor3 = pieceTable.getCurrent_piece().getData().getLength() - 1;
-                                } else {
-                                    tempCursor3++;
-                                }
-                            }
-                            if (tempCursor3 == 0 && pieceTable.getCurrent_piece().getPrevious() == null){
-                                tempCursor3--;
+                    case ":w":
+                        int startC = pieceTable.getCurrent_piece().getData().getStart();
+                        int endC = pieceTable.getCurrent_piece().getData().getEnd();
+                        int cursorC = cursor;
+                        if (cursorC == pieceTable.getCurrent_piece().getData().getLength()){
+                            break;
+                        }
+                        while (pieceTable.getAdditional_buffer().substring(startC,endC+1).charAt(cursorC) != ' '){
+                            cursorC = forwardCursor(cursorC, pieceTable);
+                            if (cursorC == pieceTable.getCurrent_piece().getData().getLength()){
+                                cursorC--;
                                 break;
                             }
                         }
-                        cursor = tempCursor3 + 1;
+                        cursor = cursorC+1;
 
                         break;
                     case ":b":
