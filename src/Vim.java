@@ -156,8 +156,11 @@ public class Vim {
                             cursor = input.length();
                         }
                         else if (cursor == 0){
-                            out = pieceTable.Insert(pieceTable.getCurrent_piece(),piece);
+                            out = pieceTable.Insert(pieceTable.getCurrent_piece().getPrevious(),piece);
+//                            cursor = 0;
+//                            pieceTable.setCurrent_piece(out.getNext());
                         }else if (cursor > 0 && cursor < pieceTable.getCurrent_piece().getData().getLength()){
+                            System.out.println("hooooo");
                             int startPoint = pieceTable.getCurrent_piece().getData().getStart();
                             int endPoint = pieceTable.getCurrent_piece().getData().getEnd();
                             PieceInfo preInfo = new PieceInfo(startPoint, cursor - startPoint, PieceType.Added);
@@ -172,8 +175,8 @@ public class Vim {
 
                             out = pieceTable.Insert(pieceTable.getCurrent_piece(),piece);
 
-                            pieceTable.setCurrent_piece(out);
-                            cursor = input.length();
+                            pieceTable.setCurrent_piece(out.getNext());
+                            cursor =0;
 
                         }else if (cursor == pieceTable.getCurrent_piece().getData().getLength()){
                             out = pieceTable.Insert(pieceTable.getCurrent_piece(),piece);
@@ -306,10 +309,21 @@ public class Vim {
 //            System.out.println(temp.getNext());
             Piece temp = pieceTable.First();
             System.out.println(temp);
-            while (temp != null) {
-                System.out.println(temp.getData().getLength());
+            String out = "";
+            while (temp.getNext() != null) {
+//                System.out.println("Start");
+//                System.out.println(temp.getData().getStart());
+//                System.out.println("End");
+//                System.out.println(temp.getData().getEnd());
+                String o = pieceTable.getAdditional_buffer().substring(temp.getData().getStart(),temp.getData().getEnd()+1);
+
+                if(temp.equals( pieceTable.getCurrent_piece())){
+                    o = o.substring(0,cursor)+"*"+o.substring(cursor);
+                }
+                out = out + o;
                 temp = temp.getNext();
             }
+            System.out.println(out);
 
         }
     }
