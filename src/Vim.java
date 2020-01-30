@@ -105,6 +105,8 @@ public class Vim {
                         }
                         while (pieceTable.getAdditional_buffer().substring(startB,endB+1).charAt(cursorB) != '\n') {
                             cursorB = forwardCursor(cursorB, pieceTable);
+                            startB = pieceTable.getCurrent_piece().getData().getStart();
+                            endB = pieceTable.getCurrent_piece().getData().getEnd();
                             if (cursorB == pieceTable.getCurrent_piece().getData().getLength()){
                                 break;
                             }
@@ -128,6 +130,8 @@ public class Vim {
                         }
                         while (pieceTable.getAdditional_buffer().substring(startC,endC+1).charAt(cursorC) != ' '){
                             cursorC = forwardCursor(cursorC, pieceTable);
+                            startC = pieceTable.getCurrent_piece().getData().getStart();
+                            endC = pieceTable.getCurrent_piece().getData().getEnd();
                             if (cursorC == pieceTable.getCurrent_piece().getData().getLength()){
                                 cursorC--;
                                 break;
@@ -137,6 +141,50 @@ public class Vim {
 
                         break;
                     case ":b":
+                        int startD = pieceTable.getCurrent_piece().getData().getStart();
+                        int endD = pieceTable.getCurrent_piece().getData().getEnd();
+                        int cursorD = cursor;
+                        if (cursorD == 0 && pieceTable.getCurrent_piece().getPrevious() == null){
+                            break;
+                        }
+                        while (pieceTable.getAdditional_buffer().substring(startD,endD+1).charAt(cursorD) != ' '){
+                            cursorD = backCursor(cursorD, pieceTable);
+                            startD = pieceTable.getCurrent_piece().getData().getStart();
+                            endD = pieceTable.getCurrent_piece().getData().getEnd();
+                            if (cursorD == 0 && pieceTable.getCurrent_piece().getPrevious() == null){
+                                break;
+                            }
+                        }
+                        cursor = cursorD+1;
+                        break;
+                    case ":":
+                        int number = scanner.nextInt() - 1;
+                        int counter = 0;
+
+                        int startE = pieceTable.getCurrent_piece().getData().getStart();
+                        int endE = pieceTable.getCurrent_piece().getData().getEnd();
+                        int cursorE = 0;
+                        pieceTable.setCurrent_piece(pieceTable.First());
+                        while (counter < number) {
+                            if (cursorE == pieceTable.getCurrent_piece().getData().getLength()) {
+                                break;
+                            }
+                            while (pieceTable.getAdditional_buffer().substring(startE, endE + 1).charAt(cursorE) != '\n') {
+                                cursorE = forwardCursor(cursorE, pieceTable);
+                                if (cursorE == pieceTable.getCurrent_piece().getData().getLength()) {
+                                    break;
+                                }
+                                startE = pieceTable.getCurrent_piece().getData().getStart();
+                                endE = pieceTable.getCurrent_piece().getData().getEnd();
+                            }
+                            cursorE = forwardCursor(cursorE, pieceTable);
+                            counter++;
+                            System.out.println("CE:"+cursorE);
+                            System.out.println("COONTER:"+counter);
+
+                        }
+                        cursor = cursorE;
+
                         break;
                     case ":dd":
                         break;
