@@ -52,12 +52,15 @@ public class Vim {
 
                 switch (command) {
                     case "i":
+                        System.out.println("############################ Input MODE ############################");
                         vim_mode = Mode.insert;
                         break;
                     case "c":
+                        System.out.println("############################ Command MODE ############################");
                         vim_mode = Mode.command;
                         break;
                     case "v":
+                        System.out.println("############################ Statistics MODE ############################");
                         vim_mode = Mode.statics;
                         break;
                     case ">":
@@ -71,7 +74,7 @@ public class Vim {
                         break;
                     case "$":
                         cursor = endLine(cursor, pieceTable);
-                    break;
+                        break;
                     case "bf":
                         cursor = 0;
                         pieceTable.setCurrent_piece(pieceTable.First());
@@ -121,7 +124,6 @@ public class Vim {
                         Piece endPiece = pieceTable.getCurrent_piece();
 
 
-
                         Piece iterator = beginPiece.getNext();
 
                         while (iterator != endPiece && iterator.getNext() != null) {
@@ -134,18 +136,18 @@ public class Vim {
                         }
 //                        System.err.println("Now: " +pieceTable.getCurrent_piece().getData().getLength());
 //                        System.err.println("Pre: " +pieceTable.getCurrent_piece().getPrevious().getData().getLength());
-                        pieceTable.getCurrent_piece().getData().setLength(pieceTable.getCurrent_piece().getData().getLength()-endOfLine-1);
-                        pieceTable.getCurrent_piece().getData().setStart(pieceTable.getCurrent_piece().getData().getStart()+endOfLine+1);
+                        pieceTable.getCurrent_piece().getData().setLength(pieceTable.getCurrent_piece().getData().getLength() - endOfLine - 1);
+                        pieceTable.getCurrent_piece().getData().setStart(pieceTable.getCurrent_piece().getData().getStart() + endOfLine + 1);
 
-                        if (pieceTable.getCurrent_piece().getPrevious() != null){
+                        if (pieceTable.getCurrent_piece().getPrevious() != null) {
                             pieceTable.getCurrent_piece().getPrevious().getData().setLength(beginningOfLine);
                         }
                         cursor = 0;
-                        cursor = insertText(cursor,pieceTable,trieTree,"\n");
-                        cursor = backCursor(cursor,pieceTable);
+                        cursor = insertText(cursor, pieceTable, trieTree, "\n");
+                        cursor = backCursor(cursor, pieceTable);
 
-                        System.err.println("Now: " +pieceTable.getCurrent_piece().getData().getLength());
-                        System.err.println("Pre: " +pieceTable.getCurrent_piece().getPrevious().getData().getLength());
+                        System.err.println("Now: " + pieceTable.getCurrent_piece().getData().getLength());
+                        System.err.println("Pre: " + pieceTable.getCurrent_piece().getPrevious().getData().getLength());
 //                        beginPiece.getData().setLength(beginningOfLine);
 //                        System.err.println("Start: "+endPiece.getData().getStart());
 //                        System.err.println("Length "+endPiece.getData().getLength());
@@ -177,9 +179,9 @@ public class Vim {
                     case "/":
                         String find = scanner.next();
                         if (trieTree.search(find)) {
-                            System.out.println(find+" is in your text!");
-                        }else {
-                            System.out.println(find+" is not in your text!");
+                            System.out.println(find + " is in your text!");
+                        } else {
+                            System.out.println(find + " is not in your text!");
                         }
                         break;
                     default:
@@ -193,6 +195,7 @@ public class Vim {
 
                 switch (input) {
                     case "esc":
+                        System.out.println("############################ Command MODE ############################");
                         vim_mode = Mode.command;
                         break;
                     case ">":
@@ -207,39 +210,40 @@ public class Vim {
                 }
 
 
-
             } else if (vim_mode == Mode.statics) {
-                System.out.println("Statics");
-                int startV = pieceTable.First().getData().getStart();
-                int endV = pieceTable.First().getData().getEnd();
+
                 int cursorV = 0;
                 int word_counter = 0;
                 int line_counter = 0;
 
                 System.out.println(pieceTable.getCurrent_piece().getData().getStart());
                 System.out.println(pieceTable.getCurrent_piece().getData().getLength());
-                while(cursorV < pieceTable.getAdditional_buffer().length()){
-
+                int startV = pieceTable.First().getData().getStart();
+                int endV = pieceTable.First().getData().getEnd();
+                Piece iterator = pieceTable.First();
+                while (iterator != null) {
                     System.err.println(cursorV);
-                    try {
-                        if (pieceTable.getAdditional_buffer().substring(startV, endV + 1).charAt(cursorV) == ' ' || pieceTable.getAdditional_buffer().substring(startV, endV + 1).charAt(cursorV) == '\n') {
+                    int counter = 0;
+                    while (counter < iterator.getData().getLength()) {
+                        if (pieceTable.getAdditional_buffer().substring(startV, endV + 1).charAt(counter) == ' ' || pieceTable.getAdditional_buffer().substring(startV, endV + 1).charAt(counter) == '\n') {
                             word_counter++;
                         }
 
-                        if (pieceTable.getAdditional_buffer().substring(startV, endV + 1).charAt(cursorV) == '\n') {
+                        if (pieceTable.getAdditional_buffer().substring(startV, endV + 1).charAt(counter) == '\n') {
                             line_counter++;
-                        }
-                    }catch (Exception e){
-                        //
-                    }
-                    cursorV = forwardCursor(cursorV,pieceTable);
-                    startV = pieceTable.getCurrent_piece().getData().getStart();
-                    endV = pieceTable.getCurrent_piece().getData().getEnd();
-//                    System.err.println(cursorV);
 
+                        }
+                        counter++;
+                    }
+                        iterator = iterator.getNext();
+                    if (iterator != null) {
+                        startV = iterator.getData().getStart();
+                        endV = iterator.getData().getEnd();
+                    }
                 }
-                System.out.println("Number of Words <<<->>> "+ (word_counter+1));
-                System.out.println("Number of Lines <<<->>> "+ (line_counter+1));
+                System.out.println("Number of Words <<<->>> " + (word_counter + 1));
+                System.out.println("Number of Lines <<<->>> " + (line_counter + 1));
+//                System.out.println(trieTree.findLongest());
                 vim_mode = Mode.command;
             }
 
@@ -269,28 +273,29 @@ public class Vim {
 
     private static int previousWord(int cursor, PieceTable pieceTable) {
         int startD = pieceTable.getCurrent_piece().getData().getStart();
-        int endD= pieceTable.getCurrent_piece().getData().getEnd();
+        int endD = pieceTable.getCurrent_piece().getData().getEnd();
         int cursorD = cursor;
 
-        if (cursorD == pieceTable.getCurrent_piece().getData().getLength() && pieceTable.getCurrent_piece().getNext() == null){
-            cursorD = backCursor(cursorD, pieceTable);;
+        if (cursorD == pieceTable.getCurrent_piece().getData().getLength() && pieceTable.getCurrent_piece().getNext() == null) {
+            cursorD = backCursor(cursorD, pieceTable);
+            ;
+        } else if (pieceTable.getAdditional_buffer().substring(startD, endD + 1).charAt(cursorD) == ' ' || pieceTable.getAdditional_buffer().substring(startD, endD + 1).charAt(cursorD) == '\n') {
+            cursorD = backCursor(cursorD, pieceTable);
+            ;
         }
-        else if (pieceTable.getAdditional_buffer().substring(startD,endD+1).charAt(cursorD) == ' ' || pieceTable.getAdditional_buffer().substring(startD,endD+1).charAt(cursorD) == '\n' ){
-            cursorD = backCursor(cursorD, pieceTable);;
-        }
-        while (pieceTable.getAdditional_buffer().substring(startD,endD+1).charAt(cursorD) != ' ' && pieceTable.getAdditional_buffer().substring(startD,endD+1).charAt(cursorD) != '\n') {
+        while (pieceTable.getAdditional_buffer().substring(startD, endD + 1).charAt(cursorD) != ' ' && pieceTable.getAdditional_buffer().substring(startD, endD + 1).charAt(cursorD) != '\n') {
 
             cursorD = backCursor(cursorD, pieceTable);
             startD = pieceTable.getCurrent_piece().getData().getStart();
             endD = pieceTable.getCurrent_piece().getData().getEnd();
-            if (cursorD <= 0 && pieceTable.getCurrent_piece().getPrevious() == null){
+            if (cursorD <= 0 && pieceTable.getCurrent_piece().getPrevious() == null) {
                 break;
             }
         }
-        if (cursorD == 0 && pieceTable.getCurrent_piece().getPrevious() == null){
+        if (cursorD == 0 && pieceTable.getCurrent_piece().getPrevious() == null) {
             cursorD--;
         }
-        cursor = cursorD+1;
+        cursor = cursorD + 1;
         return cursor;
     }
 
@@ -298,19 +303,19 @@ public class Vim {
         int startC = pieceTable.getCurrent_piece().getData().getStart();
         int endC = pieceTable.getCurrent_piece().getData().getEnd();
         int cursorC = cursor;
-        if (cursorC == pieceTable.getCurrent_piece().getData().getLength()){
+        if (cursorC == pieceTable.getCurrent_piece().getData().getLength()) {
             return cursor;
         }
-        while (pieceTable.getAdditional_buffer().substring(startC,endC+1).charAt(cursorC) != ' '  && pieceTable.getAdditional_buffer().substring(startC,endC+1).charAt(cursorC) != '\n'){
+        while (pieceTable.getAdditional_buffer().substring(startC, endC + 1).charAt(cursorC) != ' ' && pieceTable.getAdditional_buffer().substring(startC, endC + 1).charAt(cursorC) != '\n') {
             cursorC = forwardCursor(cursorC, pieceTable);
             startC = pieceTable.getCurrent_piece().getData().getStart();
             endC = pieceTable.getCurrent_piece().getData().getEnd();
-            if (cursorC == pieceTable.getCurrent_piece().getData().getLength()){
+            if (cursorC == pieceTable.getCurrent_piece().getData().getLength()) {
                 cursorC--;
                 break;
             }
         }
-        cursor = cursorC+1;
+        cursor = cursorC + 1;
         return cursor;
     }
 
@@ -360,7 +365,7 @@ public class Vim {
 
         trieTree.root = new TrieNode();
         String[] arrayLine = input.split("\n");
-        for (String i :arrayLine) {
+        for (String i : arrayLine) {
             String[] array = i.split(" ");
             for (String j : array) {
                 trieTree.insert(j);
@@ -379,14 +384,14 @@ public class Vim {
         int startB = pieceTable.getCurrent_piece().getData().getStart();
         int endB = pieceTable.getCurrent_piece().getData().getEnd();
         int cursorB = cursor;
-        if (cursorB == pieceTable.getCurrent_piece().getData().getLength()){
+        if (cursorB == pieceTable.getCurrent_piece().getData().getLength()) {
             return cursor;
         }
-        while (pieceTable.getAdditional_buffer().substring(startB,endB+1).charAt(cursorB) != '\n') {
+        while (pieceTable.getAdditional_buffer().substring(startB, endB + 1).charAt(cursorB) != '\n') {
             cursorB = forwardCursor(cursorB, pieceTable);
             startB = pieceTable.getCurrent_piece().getData().getStart();
             endB = pieceTable.getCurrent_piece().getData().getEnd();
-            if (cursorB == pieceTable.getCurrent_piece().getData().getLength()){
+            if (cursorB == pieceTable.getCurrent_piece().getData().getLength()) {
                 break;
             }
         }
@@ -395,31 +400,48 @@ public class Vim {
     }
 
     private static int beginLine(int cursor, PieceTable pieceTable) {
+
+        int cursorA = cursor;
+        if (cursorA == 0 && pieceTable.getCurrent_piece().getPrevious() == null || (cursor == -1)) {
+            System.out.println("gav");
+            pieceTable.setCurrent_piece(pieceTable.First());
+            return 0;
+        }
+
+
+        if (cursorA == pieceTable.getCurrent_piece().getData().getLength()) {
+            cursorA = backCursor(cursorA, pieceTable);
+
+        }
+
+
+        cursorA = backCursor(cursorA, pieceTable);
+        if (cursorA == -1) {
+            cursorA = forwardCursor(cursorA, pieceTable);
+        }
+
+        System.err.println("Cursor: " + cursorA);
+        System.err.println("Length: " + pieceTable.getCurrent_piece().getData().getLength());
+
         int startA = pieceTable.getCurrent_piece().getData().getStart();
         int endA = pieceTable.getCurrent_piece().getData().getEnd();
-        int cursorA = cursor;
 
 
-//        if (cursorA == pieceTable.getCurrent_piece().getData().getLength() && pieceTable.getCurrent_piece().getNext() == null){
-//            cursorA = backCursor(cursorA, pieceTable);;
-//        }
-//        else if (pieceTable.getAdditional_buffer().substring(startA,endA+1).charAt(cursorA-1) == '\n'){
-//            cursorA = backCursor(cursorA, pieceTable);;
-//        }
-
-
-        while (pieceTable.getAdditional_buffer().substring(startA,endA+1).charAt(cursorA-1) != '\n') {
-            if (cursorA <= 0 && pieceTable.getCurrent_piece().getPrevious() == null){
-                break;
-            }
+        while (pieceTable.getAdditional_buffer().substring(startA, endA + 1).charAt(cursorA) != '\n') {
+            System.err.println("Raftam");
             cursorA = backCursor(cursorA, pieceTable);
+            System.err.println("number of curosor " + cursorA);
+            if ((cursorA == 0 && pieceTable.getCurrent_piece().getPrevious() == null) || cursorA == -1) {
+                pieceTable.setCurrent_piece(pieceTable.First());
+                return 0;
+            }
             startA = pieceTable.getCurrent_piece().getData().getStart();
             endA = pieceTable.getCurrent_piece().getData().getEnd();
+
         }
-        if (cursorA == 0 && pieceTable.getCurrent_piece().getPrevious() == null){
-            cursorA--;
-        }
-        cursor = cursorA+1;
+//        System.out.println(cursorA);
+
+        cursor = cursorA + 1;
         return cursor;
     }
 

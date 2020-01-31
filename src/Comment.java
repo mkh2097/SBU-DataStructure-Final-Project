@@ -222,4 +222,4 @@
 
 
 //                        out = pieceTable.Insert(pieceTable.getCurrent_piece(), piece);
-//                            pieceTable.setCurrent_piece(out);
+//                            pieceTable.setCurrent_piece(out)
