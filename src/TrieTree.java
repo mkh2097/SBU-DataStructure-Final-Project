@@ -7,21 +7,21 @@ public class TrieTree {
         String output[] = {"Not present in trie", "Present in trie"};
 
 
-        root = new TrieNode();
 
         // Construct trie
         int i;
         for (i = 0; i < keys.length ; i++)
-            insert(keys[i]);
+//            insert(keys[i]);
 
         // Search for different keys
-        if(search("#") == true)
+//        if(search("#") == true)
             System.out.println("# --- " + output[1]);
-        else System.out.println("# --- " + output[0]);
+//        else System.out.println("# --- " + output[0]);
     }
-    static TrieNode root;
+      TrieNode root;
 
-    static void insert(String key){
+
+     void insert(String key){
         int level;
         int length = key.length();
         int index;
@@ -39,7 +39,7 @@ public class TrieTree {
         p.isWord = true;
     }
 
-    static boolean search(String key){
+     boolean search(String key){
         int level;
         int length = key.length();
         int index;
