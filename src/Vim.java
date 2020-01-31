@@ -44,6 +44,7 @@ public class Vim {
         PieceTable pieceTable = new PieceTable();
         TrieTree trieTree = new TrieTree();
         Scanner scanner = new Scanner(System.in);
+        String clipBoard = "";
 
 
         while (true) {
@@ -164,6 +165,9 @@ public class Vim {
                         Piece endPieceB = pieceTable.getCurrent_piece();
                         break;
                     case ":y":
+                        Piece saveState = pieceTable.getCurrent_piece();
+                        int saveCursor = cursor;
+
                         cursor = beginLine(cursor, pieceTable);
                         int beginningOfLineC = cursor;
                         Piece beginPieceC = pieceTable.getCurrent_piece();
@@ -172,9 +176,26 @@ public class Vim {
                         int endOfLineC = cursor;
                         Piece endPieceC = pieceTable.getCurrent_piece();
 
+                        Piece iteratorC= beginPieceC.getNext();
+
+                        clipBoard += pieceTable.getAdditional_buffer().substring(beginPieceC.getData().getStart()+beginningOfLineC,beginPieceC.getData().getEnd()+1);
+
+                        while (iteratorC != endPieceC && iteratorC != null) {
+                            int tempStartC = iteratorC.getData().getStart();
+                            int tempEndC = iteratorC.getData().getEnd();
+                            clipBoard += pieceTable.getAdditional_buffer().substring(tempStartC,tempEndC+1);
+
+                            iteratorC = iteratorC.getNext();
+                        }
+                        clipBoard += pieceTable.getAdditional_buffer().substring(endPieceC.getData().getStart(),endPieceC.getData().getEnd()-endOfLineC+1);
+
+                        pieceTable.setCurrent_piece(saveState);
+                        cursor = saveCursor;
+                        System.err.println(clipBoard);
 
                         break;
                     case ":p":
+                        cursor = insertText(cursor,pieceTable,trieTree,clipBoard);
                         break;
                     case "/":
                         String find = scanner.next();
