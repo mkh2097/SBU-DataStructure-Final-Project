@@ -2,23 +2,23 @@ import java.util.LinkedList;
 
 public class TrieTree {
 
-    public static void main(String[] args) {
-        String keys[] = {"the", "#", "there", "answer", "any",
-                "by", "bye", "their"};
-
-        String output[] = {"Not present in trie", "Present in trie"};
-
-
-        // Construct trie
-        int i;
-        for (i = 0; i < keys.length; i++)
-//            insert(keys[i]);
-
-            // Search for different keys
-//        if(search("#") == true)
-            System.out.println("# --- " + output[1]);
-//        else System.out.println("# --- " + output[0]);
-    }
+//    public static void main(String[] args) {
+//        String keys[] = {"the", "#", "there", "answer", "any",
+//                "by", "bye", "their"};
+//
+//        String output[] = {"Not present in trie", "Present in trie"};
+//
+//
+//        // Construct trie
+//        int i;
+//        for (i = 0; i < keys.length; i++)
+////            insert(keys[i]);
+//
+//            // Search for different keys
+////        if(search("#") == true)
+//            System.out.println("# --- " + output[1]);
+////        else System.out.println("# --- " + output[0]);
+//    }
 
     TrieNode root;
 

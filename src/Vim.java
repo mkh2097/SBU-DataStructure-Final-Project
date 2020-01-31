@@ -38,6 +38,29 @@ enum InsertActions {
 }
 
 public class Vim {
+    public static void insert(String val,String[] arr){
+        int i;
+        for(i=0;i<arr.length-1;i++){
+            if(arr[i].length()>val.length())
+                break;
+        }
+        for(int k=arr.length-2; k>=i; k--){
+            arr[k+1]=arr[k];
+        }
+        arr[i]=val;
+    }
+    public static void insertLong(String val,String[] arr){
+        int i;
+        for(i=0;i<arr.length-1;i++){
+            if(arr[i].length()<val.length())
+                break;
+        }
+        for(int k=arr.length-2; k>=i; k--){
+            arr[k+1]=arr[k];
+        }
+        arr[i]=val;
+    }
+
     public static void main(String[] args) {
         Mode vim_mode = Mode.insert; //
         int cursor = 0;
@@ -46,6 +69,15 @@ public class Vim {
         Scanner scanner = new Scanner(System.in);
         String clipBoard = "";
 
+        String[] largestWords = new String[11];
+        String[] shortestWords = new String[11];
+
+        for (int i = 0; i < largestWords.length; i++) {
+            largestWords[i] = "";
+        }
+        for (int i = 0; i < shortestWords.length; i++) {
+            shortestWords[i] = "############################################################################################################################################################";
+        }
 
         while (true) {
             if (vim_mode == Mode.command) {
@@ -206,6 +238,37 @@ public class Vim {
                         break;
                     case "/":
                         String find = scanner.next();
+                        Piece iterate = pieceTable.First();
+                        while (iterate != null){
+                            int counterF = 0;
+                            int line_counter = 0;
+                            int startF = iterate.getData().getStart();
+                            int endF = iterate.getData().getEnd();
+                            while (counterF < iterate.getData().getLength()) {
+                                if (pieceTable.getAdditional_buffer().substring(startF, startF + 1).charAt(counterF) == '\n') {
+                                    line_counter++;
+                                }
+                                counterF++;
+                            }
+
+//                            String[] arrayLine = pieceTable.getAdditional_buffer().substring(iterate.getData().getStart(),iterate.getData().getEnd()+1).split("\n");
+//                            for (String i : arrayLine) {
+//                                trieTree.root = new TrieNode();
+//                                String[] array = i.split(" ");
+//                                for (String j : array) {
+//                                    trieTree.insert(j);
+//                                }
+//                                if (trieTree.search(find)){
+//                                    System.out.println();
+//                                }
+//                            }
+//                            iterate = iterate.getNext();
+//                            if (iterator != null) {
+//                                startV = iterator.getData().getStart();
+//                                endV = iterator.getData().getEnd();
+//                            }
+                        }
+
                         if (trieTree.search(find)) {
                             System.out.println(find + " is in your text!");
                         } else {
@@ -240,21 +303,24 @@ public class Vim {
 
             } else if (vim_mode == Mode.statics) {
 
-                int cursorV = 0;
                 int word_counter = 0;
                 int line_counter = 0;
 
-                System.out.println(pieceTable.getCurrent_piece().getData().getStart());
-                System.out.println(pieceTable.getCurrent_piece().getData().getLength());
+//                System.out.println(pieceTable.getCurrent_piece().getData().getStart());
+//                System.out.println(pieceTable.getCurrent_piece().getData().getLength());
                 int startV = pieceTable.First().getData().getStart();
                 int endV = pieceTable.First().getData().getEnd();
                 Piece iterator = pieceTable.First();
                 while (iterator != null) {
-                    System.err.println(cursorV);
+//                    System.err.println(cursorV);
                     int counter = 0;
+                    int save_counter = counter;
                     while (counter < iterator.getData().getLength()) {
                         if (pieceTable.getAdditional_buffer().substring(startV, endV + 1).charAt(counter) == ' ' || pieceTable.getAdditional_buffer().substring(startV, endV + 1).charAt(counter) == '\n') {
                             word_counter++;
+                            insert(pieceTable.getAdditional_buffer().substring(startV + save_counter, startV + counter),shortestWords);
+                            insertLong(pieceTable.getAdditional_buffer().substring(startV + save_counter, startV + counter),largestWords);
+                            save_counter = counter+1;
                         }
 
                         if (pieceTable.getAdditional_buffer().substring(startV, endV + 1).charAt(counter) == '\n') {
@@ -263,7 +329,10 @@ public class Vim {
                         }
                         counter++;
                     }
-                        iterator = iterator.getNext();
+                    insert(pieceTable.getAdditional_buffer().substring(startV + save_counter, startV + counter),shortestWords);
+                    insertLong(pieceTable.getAdditional_buffer().substring(startV + save_counter, startV + counter),largestWords);
+
+                    iterator = iterator.getNext();
                     if (iterator != null) {
                         startV = iterator.getData().getStart();
                         endV = iterator.getData().getEnd();
@@ -271,6 +340,12 @@ public class Vim {
                 }
                 System.out.println("Number of Words <<<->>> " + (word_counter + 1));
                 System.out.println("Number of Lines <<<->>> " + (line_counter + 1));
+                for(int i = 0 ; i < 10;i++){
+                    System.out.println(i+1+" Shortest Word is : "+shortestWords[i]);
+                }
+                for(int i = 0 ; i < 10;i++){
+                    System.out.println(i+1+" Longest Word is : "+largestWords[i]);
+                }
 //                System.out.println(trieTree.findLongest());
                 vim_mode = Mode.command;
             }
@@ -323,7 +398,7 @@ public class Vim {
         if (cursorD == 0 && pieceTable.getCurrent_piece().getPrevious() == null) {
             cursorD--;
         }
-        cursor = cursorD + 1;
+        cursor = cursorD+1;
         return cursor;
     }
 
@@ -391,14 +466,14 @@ public class Vim {
             cursor = input.length();
         }
 
-        trieTree.root = new TrieNode();
-        String[] arrayLine = input.split("\n");
-        for (String i : arrayLine) {
-            String[] array = i.split(" ");
-            for (String j : array) {
-                trieTree.insert(j);
-            }
-        }
+//        trieTree.root = new TrieNode();
+//        String[] arrayLine = input.split("\n");
+//        for (String i : arrayLine) {
+//            String[] array = i.split(" ");
+//            for (String j : array) {
+//                trieTree.insert(j);
+//            }
+//        }
 
         String pre = "";
         if (pieceTable.getAdditional_buffer() != null) {
