@@ -74,7 +74,7 @@ class PieceTable {
     }
 
     public void Delete(Piece position) {
-        if (position != list) {
+        if (position != First()) {
             position.getPrevious().setNext(position.getNext());
             if (position.getNext() != null) {
                 position.getNext().setPrevious(position.getPrevious());
@@ -82,8 +82,10 @@ class PieceTable {
                 end_list = position.getPrevious();
             }
         } else {
-            list = list.getNext();
-            list.setPrevious(null);
+            list.setNext(list.getNext().getNext());
+            list.getNext().setPrevious(list);
+//            list = list.getNext();
+//            list.setPrevious(null);
         }
         position.setPrevious(null);
         position.setNext(null);
@@ -203,33 +205,3 @@ class Piece {
     }
 }
 
-//class PieceTabl {
-//    private String original_buffer;
-//    private String additional_buffer;
-//    private DubLinkedList<Piece> nodes= new DubLinkedList<>();
-//    private Piece currentPiece;
-//
-//    public Piece getCurrentPiece() {
-//        return currentPiece;
-//    }
-//
-//    public void setCurrentPiece(Piece currentPiece) {
-//        this.currentPiece = currentPiece;
-//    }
-//
-//    public void setAdditional_buffer(String additional_buffer) {
-//        this.additional_buffer = additional_buffer;
-//    }
-//
-//    public String getAdditional_buffer() {
-//        return additional_buffer;
-//    }
-//
-//    public void setNodes(DubLinkedList<Piece> nodes) {
-//        this.nodes = nodes;
-//    }
-//
-//    public DubLinkedList<Piece> getNodes() {
-//        return nodes;
-//    }
-//}

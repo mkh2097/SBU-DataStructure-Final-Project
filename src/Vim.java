@@ -67,75 +67,11 @@ public class Vim {
                         cursor = backCursor(cursor, pieceTable);
                         break;
                     case "o":
-                        int startA = pieceTable.getCurrent_piece().getData().getStart();
-                        int endA = pieceTable.getCurrent_piece().getData().getEnd();
-                        int cursorA = cursor;
-
-                        if (cursorA == pieceTable.getCurrent_piece().getData().getLength() && pieceTable.getCurrent_piece().getNext() == null){
-                            cursorA = backCursor(cursorA, pieceTable);;
-                        }
-                        else if (pieceTable.getAdditional_buffer().substring(startA,endA+1).charAt(cursorA) == '\n'){
-                            cursorA = backCursor(cursorA, pieceTable);;
-                        }
-                        while (pieceTable.getAdditional_buffer().substring(startA,endA+1).charAt(cursorA) != '\n') {
-
-                            cursorA = backCursor(cursorA, pieceTable);
-                            startA = pieceTable.getCurrent_piece().getData().getStart();
-                            endA = pieceTable.getCurrent_piece().getData().getEnd();
-                            if (cursorA <= 0 && pieceTable.getCurrent_piece().getPrevious() == null){
-                                break;
-                            }
-                        }
-                        if (cursorA == 0 && pieceTable.getCurrent_piece().getPrevious() == null){
-                            cursorA--;
-                        }
-                        cursor = cursorA+1;
-//                        int tempCursor = cursor;
-//
-//                        int start = pieceTable.getCurrent_piece().getData().getStart();
-//                        int end = pieceTable.getCurrent_piece().getData().getEnd();
-//                        if (pieceTable.getCurrent_piece().getNext() == null && tempCursor == pieceTable.getCurrent_piece().getData().getLength() ){
-//                            tempCursor--;
-//                        }
-//                        else if (pieceTable.getAdditional_buffer().substring(start,end+1).charAt(tempCursor) == '\n') {
-//                            tempCursor = tempCursor-2;
-//                        }
-//                        while (pieceTable.getAdditional_buffer().substring(start,end+1).charAt(tempCursor) != '\n'){
-//                            tempCursor--;
-//                            if (tempCursor < 0) {
-//                                if (pieceTable.getCurrent_piece().getPrevious() != null) {
-//                                    pieceTable.setCurrent_piece(pieceTable.getCurrent_piece().getPrevious());
-//                                    start = pieceTable.getCurrent_piece().getData().getStart();
-//                                    end = pieceTable.getCurrent_piece().getData().getEnd();
-//                                    tempCursor = pieceTable.getCurrent_piece().getData().getLength() - 1;
-//                                } else {
-//                                    tempCursor++;
-//                                }
-//                            }
-//                            if (tempCursor == 0 && pieceTable.getCurrent_piece().getPrevious() == null){
-//                                tempCursor--;
-//                                break;
-//                            }
-//                        }
-//                        cursor = tempCursor+1;
+                        cursor = beginLine(cursor, pieceTable);
                         break;
                     case "$":
-                        int startB = pieceTable.getCurrent_piece().getData().getStart();
-                        int endB = pieceTable.getCurrent_piece().getData().getEnd();
-                        int cursorB = cursor;
-                        if (cursorB == pieceTable.getCurrent_piece().getData().getLength()){
-                            break;
-                        }
-                        while (pieceTable.getAdditional_buffer().substring(startB,endB+1).charAt(cursorB) != '\n') {
-                            cursorB = forwardCursor(cursorB, pieceTable);
-                            startB = pieceTable.getCurrent_piece().getData().getStart();
-                            endB = pieceTable.getCurrent_piece().getData().getEnd();
-                            if (cursorB == pieceTable.getCurrent_piece().getData().getLength()){
-                                break;
-                            }
-                        }
-                        cursor = cursorB;
-                        break;
+                        cursor = endLine(cursor, pieceTable);
+                    break;
                     case "bf":
                         cursor = 0;
                         pieceTable.setCurrent_piece(pieceTable.First());
@@ -145,45 +81,14 @@ public class Vim {
                         cursor = pieceTable.getCurrent_piece().getData().getLength();
                         break;
                     case ":w":
-                        int startC = pieceTable.getCurrent_piece().getData().getStart();
-                        int endC = pieceTable.getCurrent_piece().getData().getEnd();
-                        int cursorC = cursor;
-                        if (cursorC == pieceTable.getCurrent_piece().getData().getLength()){
-                            break;
-                        }
-                        while (pieceTable.getAdditional_buffer().substring(startC,endC+1).charAt(cursorC) != ' '  && pieceTable.getAdditional_buffer().substring(startC,endC+1).charAt(cursorC) != '\n'){
-                            cursorC = forwardCursor(cursorC, pieceTable);
-                            startC = pieceTable.getCurrent_piece().getData().getStart();
-                            endC = pieceTable.getCurrent_piece().getData().getEnd();
-                            if (cursorC == pieceTable.getCurrent_piece().getData().getLength()){
-                                cursorC--;
-                                break;
-                            }
-                        }
-                        cursor = cursorC+1;
-
+                        cursor = nextWord(cursor, pieceTable);
                         break;
                     case ":b":
-                        int startD = pieceTable.getCurrent_piece().getData().getStart();
-                        int endD = pieceTable.getCurrent_piece().getData().getEnd();
-                        int cursorD = cursor;
-                        if (cursorD == 0 && pieceTable.getCurrent_piece().getPrevious() == null){
-                            break;
-                        }
-                        while (pieceTable.getAdditional_buffer().substring(startD,endD+1).charAt(cursorD) != ' ' && pieceTable.getAdditional_buffer().substring(startD,endD+1).charAt(cursorD) != '\n'){
-                            cursorD = backCursor(cursorD, pieceTable);
-                            startD = pieceTable.getCurrent_piece().getData().getStart();
-                            endD = pieceTable.getCurrent_piece().getData().getEnd();
-                            if (cursorD == 0 && pieceTable.getCurrent_piece().getPrevious() == null){
-                                break;
-                            }
-                        }
-                        cursor = cursorD+1;
+                        cursor = previousWord(cursor, pieceTable);
                         break;
                     case ":":
                         int number = scanner.nextInt() - 1;
                         int counter = 0;
-
                         int startE = pieceTable.getCurrent_piece().getData().getStart();
                         int endE = pieceTable.getCurrent_piece().getData().getEnd();
                         int cursorE = 0;
@@ -202,19 +107,70 @@ public class Vim {
                             }
                             cursorE = forwardCursor(cursorE, pieceTable);
                             counter++;
-//                            System.out.println("CE:"+cursorE);
-//                            System.out.println("COONTER:"+counter);
-
                         }
                         cursor = cursorE;
 
                         break;
                     case ":dd":
+                        cursor = beginLine(cursor, pieceTable);
+                        int beginningOfLine = cursor;
+                        Piece beginPiece = pieceTable.getCurrent_piece();
 
+                        cursor = endLine(cursor, pieceTable);
+                        int endOfLine = cursor;
+                        Piece endPiece = pieceTable.getCurrent_piece();
+
+
+
+                        Piece iterator = beginPiece.getNext();
+
+                        while (iterator != endPiece && iterator.getNext() != null) {
+//                            System.out.println(iterator.getPrevious());
+//                            System.out.println(iterator);
+//                            System.out.println(iterator.getNext());
+                            Piece next = iterator.getNext();
+                            pieceTable.Delete(iterator);
+                            iterator = next;
+                        }
+//                        System.err.println("Now: " +pieceTable.getCurrent_piece().getData().getLength());
+//                        System.err.println("Pre: " +pieceTable.getCurrent_piece().getPrevious().getData().getLength());
+                        pieceTable.getCurrent_piece().getData().setLength(pieceTable.getCurrent_piece().getData().getLength()-endOfLine-1);
+                        pieceTable.getCurrent_piece().getData().setStart(pieceTable.getCurrent_piece().getData().getStart()+endOfLine+1);
+
+                        if (pieceTable.getCurrent_piece().getPrevious() != null){
+                            pieceTable.getCurrent_piece().getPrevious().getData().setLength(beginningOfLine);
+                        }
+                        cursor = 0;
+                        cursor = insertText(cursor,pieceTable,trieTree,"\n");
+                        cursor = backCursor(cursor,pieceTable);
+
+                        System.err.println("Now: " +pieceTable.getCurrent_piece().getData().getLength());
+                        System.err.println("Pre: " +pieceTable.getCurrent_piece().getPrevious().getData().getLength());
+//                        beginPiece.getData().setLength(beginningOfLine);
+//                        System.err.println("Start: "+endPiece.getData().getStart());
+//                        System.err.println("Length "+endPiece.getData().getLength());
+//                        endPiece.getData().setStart(endOfLine+1);
+//                        endPiece.getData().setLength(endPiece.getData().getLength()-endOfLine+1);
                         break;
                     case ":D":
+                        int currentPos = cursor;
+                        Piece currentPiecePos = pieceTable.getCurrent_piece();
+
+                        cursor = endLine(cursor, pieceTable);
+                        int endOfLineB = cursor;
+
+                        Piece endPieceB = pieceTable.getCurrent_piece();
                         break;
                     case ":y":
+                        cursor = beginLine(cursor, pieceTable);
+                        int beginningOfLineC = cursor;
+                        Piece beginPieceC = pieceTable.getCurrent_piece();
+
+                        cursor = endLine(cursor, pieceTable);
+                        int endOfLineC = cursor;
+                        Piece endPieceC = pieceTable.getCurrent_piece();
+
+
                         break;
                     case ":p":
                         break;
@@ -241,162 +197,16 @@ public class Vim {
                         break;
                     case ">":
                         cursor = forwardCursor(cursor, pieceTable);
-//                        System.out.println("Answer: " + pieceTable.getCurrent_piece());
-//                        System.out.println(pieceTable.getCurrent_piece().getData().getLength());
-//                        System.out.println("cursor->" + cursor);
                         break;
                     case "<":
                         cursor = backCursor(cursor, pieceTable);
-//                        System.out.println(pieceTable.getCurrent_piece().getData().getLength());
-//                        System.out.println("cursor->" + cursor);
                         break;
                     default:
-                        //String input_buffer = stringBuilder.append(input).append("\\d").toString();
-//                    String input_buffer = stringBuilder.insert(cursor, input).toString();
-//                    pieceTable.setAdditional_buffer(input_buffer);
-                        //pieceTable.getAdditional_buffer() += input
-
-                        PieceInfo pieceInfo;
-                        if (pieceTable.getAdditional_buffer() != null) {
-                            pieceInfo = new PieceInfo(pieceTable.getAdditional_buffer().length(), input.length(), PieceType.Added);
-                        } else {
-                            pieceInfo = new PieceInfo(0, input.length(), PieceType.Added);
-                        }
-                        Piece piece = new Piece(null, null, pieceInfo);
-
-
-//                    System.out.println(pieceTable.getCurrent_piece());
-                        Piece out;
-
-                        if (pieceTable.getCurrent_piece() == null) {
-                            out = pieceTable.Insert(pieceTable.getCurrent_piece(), piece);
-                            pieceTable.setCurrent_piece(out);
-                            cursor = input.length();
-                        } else if (cursor == 0) {
-                            out = pieceTable.Insert(pieceTable.getCurrent_piece().getPrevious(), piece);
-//                            cursor = 0;
-//                            pieceTable.setCurrent_piece(out.getNext());
-                        } else if (cursor > 0 && cursor < pieceTable.getCurrent_piece().getData().getLength()) {
-//                            System.out.println("hooooo");
-                            int startPoint = pieceTable.getCurrent_piece().getData().getStart();
-                            int endPoint = pieceTable.getCurrent_piece().getData().getEnd();
-                            PieceInfo preInfo = new PieceInfo(startPoint, cursor, PieceType.Added);
-                            PieceInfo nextInfo = new PieceInfo(cursor + startPoint, pieceTable.getCurrent_piece().getData().getLength() - cursor, PieceType.Added);
-
-                            Piece split = new Piece(pieceTable.getCurrent_piece(), pieceTable.getCurrent_piece().getNext(), nextInfo);
-                            pieceTable.Insert(pieceTable.getCurrent_piece(), split);
-
-                            pieceTable.getCurrent_piece().setData(preInfo);
-
-
-                            out = pieceTable.Insert(pieceTable.getCurrent_piece(), piece);
-
-                            pieceTable.setCurrent_piece(out.getNext());
-                            cursor = 0;
-
-                        } else if (cursor == pieceTable.getCurrent_piece().getData().getLength()) {
-                            out = pieceTable.Insert(pieceTable.getCurrent_piece(), piece);
-                            pieceTable.setCurrent_piece(out);
-                            cursor = input.length();
-                        }
-
-//                        System.out.println("Current->" + pieceTable.getCurrent_piece());
-//                        System.out.println("cursor->" + cursor);
-//                        if (pieceTable.getCurrent_piece() == null) {
-//                            System.out.println("hich");
-//                            out = pieceTable.Insert(pieceTable.getCurrent_piece(), piece);
-//
-//                            pieceTable.setCurrent_piece(out);
-//                        } else if (pieceTable.getCurrent_piece().getData().getStart() == cursor) {
-//                            System.out.println("avval");
-//                            out = pieceTable.Insert(pieceTable.getCurrent_piece().getPrevious(), piece);
-//                            pieceTable.setCurrent_piece(out);
-//                        } else if (pieceTable.getCurrent_piece().getNext() == null && pieceTable.getCurrent_piece().getData().getEnd() + 1 == cursor) {
-//                            System.out.println("akhar");
-//                            out = pieceTable.Insert(pieceTable.getCurrent_piece(), piece);
-//                            pieceTable.setCurrent_piece(out);
-//                        } else {
-//                            System.out.println("vasat");
-//
-//                            int startPoint = pieceTable.getCurrent_piece().getData().getStart();
-//                            int endPoint = pieceTable.getCurrent_piece().getData().getEnd();
-//                            System.out.println(cursor);
-//                            PieceInfo preInfo = new PieceInfo(startPoint - 1, cursor - startPoint, PieceType.Added);
-//                            PieceInfo nextInfo = new PieceInfo(cursor, endPoint - cursor + 1, PieceType.Added);
-//
-//
-//                            Piece split = new Piece(pieceTable.getCurrent_piece(), pieceTable.getCurrent_piece().getNext(), nextInfo);
-//                            if (pieceTable.getCurrent_piece().getNext() != null) {
-//                                pieceTable.getCurrent_piece().getNext().setPrevious(split);
-//                            }
-//                            pieceTable.getCurrent_piece().setNext(split);
-//                            pieceTable.getCurrent_piece().setData(preInfo);
-//
-//                            out = pieceTable.Insert(pieceTable.getCurrent_piece(), piece);
-//
-//
-////                            out.getPrevious().setData(preInfo);
-////
-////                            pieceTable.getCurrent_piece().setNext(out);
-//////                            if (out.getNext() != null) {
-//////                                out.getNext().setData(nextInfo);
-//////                            }
-//                            pieceTable.setCurrent_piece(out.getNext());
-//                        }
-
-
-//                        out = pieceTable.Insert(pieceTable.getCurrent_piece(), piece);
-//                            pieceTable.setCurrent_piece(out);
-                        trieTree.root = new TrieNode();
-                        String[] arrayLine = input.split("\n");
-                        for (String i :arrayLine) {
-                            String[] array = i.split(" ");
-                            for (String j : array) {
-                                trieTree.insert(j);
-                            }
-                        }
-
-                        String pre = "";
-                        if (pieceTable.getAdditional_buffer() != null) {
-                            pre = pieceTable.getAdditional_buffer();
-                        }
-                        pieceTable.setAdditional_buffer(pre + input);
-//                        cursor += input.length();
-
-
-//                        System.out.println(cursor);
-
-//                    pieceTable.getAdditional_buffer().add();
-//                        System.out.println("**********************************************************");
-//                        System.out.println(pieceTable.getCurrent_piece().getPrevious());
-//                        System.out.println(pieceTable.getCurrent_piece());
-//                        System.out.println(pieceTable.getCurrent_piece().getNext());
-//                        System.out.println("**********************************************************");
-
-
-//                    if (pieceTable.getCurrent_piece() != null) {
-//                        piece.setNext(pieceTable.getCurrent_piece().getNext());
-//                        piece.setPrevious(pieceTable.getCurrent_piece());
-//                        pieceTable.getCurrent_piece().setNext(piece);
-//                        if (pieceTable.getCurrent_piece().getNext() != null)
-//                            pieceTable.getCurrent_piece().getNext().setPrevious(piece);
-
-
-//                    System.out.println(pieceTable.getCurrent_piece());
+                        cursor = insertText(cursor, pieceTable, trieTree, input);
                         break;
                 }
 
-//                    pieceTable.setCurrent_piece(piece);
 
-
-//                    pieceTable.getNodes().Insert(pi);
-//                    Piece piece = new Piece(PieceType.Added, cursor, input.length());
-//                    Piece<Piece> node = new Piece<>(pieceTable.getNodes().getSelectedNode().getPrevious(),pieceTable.getNodes().getSelectedNode().getNext(),pieceTable.getNodes().getSelectedNode().getData());
-//                    pieceTable.getNodes().setSelectedNode(node);
-//                    Node<Piece> node = new Node<Piece>(pieceTable.getCurrentPiece());
-//                    pieceTable.getNodes().Retrieve(pieceTable.getCurrentPiece())
-
-//                    pieceTable.getNodes().add(piece);
 
             } else if (vim_mode == Mode.statics) {
                 System.out.println("Statics");
@@ -432,45 +242,12 @@ public class Vim {
                 System.out.println("Number of Lines <<<->>> "+ (line_counter+1));
                 vim_mode = Mode.command;
             }
-//            System.out.println(cursor);f
-//            System.out.println(pieceTable.getCurrent_piece().getData().getLength());
-//            System.out.println(pieceTable.getAdditional_buffer().substring(0,cursor)+"*"+pieceTable.getAdditional_buffer().substring(cursor));
 
-//            Piece temp = pieceTable.First();
-////            System.out.println(temp);
-//            String out = "";
-//            while (temp != null) {
-//                System.out.println(temp.getData().getLength());
-//
-////            System.out.println("Start: " + temp.getData().getStart() + "&" + "Length:  " + temp.getData().getLength());
-//                temp = temp.getNext();
-//            }
-//            System.out.println(out.substring(0, cursor) + "*" + out.substring(cursor));
-//            System.out.println(out);
-
-
-//            for (int i = 0; i < pieceTable.getNodes().size(); i++) {
-//                System.out.println(pieceTable.getNodes().get(i).getStart() + "," + pieceTable.getNodes().get(i).getLength());
-//                for (int j = 0 ; j < pieceTable.getNodes().get(i).getNew_line().size() ; j++) {
-//                    System.out.println(pieceTable.getNodes().get(i).getNew_line().get(j));
-//                }
-//                System.out.println("***************");
-//            }
-//            try {
-//                System.out.println(pieceTable.getAdditional_buffer().substring(0, cursor) + "*" + pieceTable.getAdditional_buffer().substring(cursor));
-//            System.out.println(temp);
-//            System.out.println(temp.getPrevious());
-//            System.out.println(temp.getNext());
             Piece temp = pieceTable.First();
-//            System.out.println(temp);
+
             String out = "";
             while (temp != null) {
-//                System.out.println("Start");
-//                System.out.println(temp.getData().getStart());
-//                System.out.println("Length");
-//                System.out.println(temp.getData().getLength());
-//                System.out.println("End");
-//                System.out.println(temp.getData().getEnd());
+
 
                 String o = pieceTable.getAdditional_buffer().substring(temp.getData().getStart(), temp.getData().getEnd() + 1);
 
@@ -488,6 +265,162 @@ public class Vim {
             System.out.println(out);
 
         }
+    }
+
+    private static int previousWord(int cursor, PieceTable pieceTable) {
+        int startD = pieceTable.getCurrent_piece().getData().getStart();
+        int endD= pieceTable.getCurrent_piece().getData().getEnd();
+        int cursorD = cursor;
+
+        if (cursorD == pieceTable.getCurrent_piece().getData().getLength() && pieceTable.getCurrent_piece().getNext() == null){
+            cursorD = backCursor(cursorD, pieceTable);;
+        }
+        else if (pieceTable.getAdditional_buffer().substring(startD,endD+1).charAt(cursorD) == ' ' || pieceTable.getAdditional_buffer().substring(startD,endD+1).charAt(cursorD) == '\n' ){
+            cursorD = backCursor(cursorD, pieceTable);;
+        }
+        while (pieceTable.getAdditional_buffer().substring(startD,endD+1).charAt(cursorD) != ' ' && pieceTable.getAdditional_buffer().substring(startD,endD+1).charAt(cursorD) != '\n') {
+
+            cursorD = backCursor(cursorD, pieceTable);
+            startD = pieceTable.getCurrent_piece().getData().getStart();
+            endD = pieceTable.getCurrent_piece().getData().getEnd();
+            if (cursorD <= 0 && pieceTable.getCurrent_piece().getPrevious() == null){
+                break;
+            }
+        }
+        if (cursorD == 0 && pieceTable.getCurrent_piece().getPrevious() == null){
+            cursorD--;
+        }
+        cursor = cursorD+1;
+        return cursor;
+    }
+
+    private static int nextWord(int cursor, PieceTable pieceTable) {
+        int startC = pieceTable.getCurrent_piece().getData().getStart();
+        int endC = pieceTable.getCurrent_piece().getData().getEnd();
+        int cursorC = cursor;
+        if (cursorC == pieceTable.getCurrent_piece().getData().getLength()){
+            return cursor;
+        }
+        while (pieceTable.getAdditional_buffer().substring(startC,endC+1).charAt(cursorC) != ' '  && pieceTable.getAdditional_buffer().substring(startC,endC+1).charAt(cursorC) != '\n'){
+            cursorC = forwardCursor(cursorC, pieceTable);
+            startC = pieceTable.getCurrent_piece().getData().getStart();
+            endC = pieceTable.getCurrent_piece().getData().getEnd();
+            if (cursorC == pieceTable.getCurrent_piece().getData().getLength()){
+                cursorC--;
+                break;
+            }
+        }
+        cursor = cursorC+1;
+        return cursor;
+    }
+
+    private static int insertText(int cursor, PieceTable pieceTable, TrieTree trieTree, String input) {
+        PieceInfo pieceInfo;
+        if (pieceTable.getAdditional_buffer() != null) {
+            pieceInfo = new PieceInfo(pieceTable.getAdditional_buffer().length(), input.length(), PieceType.Added);
+        } else {
+            pieceInfo = new PieceInfo(0, input.length(), PieceType.Added);
+        }
+        Piece piece = new Piece(null, null, pieceInfo);
+
+
+//                    System.out.println(pieceTable.getCurrent_piece());
+        Piece out;
+
+        if (pieceTable.getCurrent_piece() == null) {
+            out = pieceTable.Insert(pieceTable.getCurrent_piece(), piece);
+            pieceTable.setCurrent_piece(out);
+            cursor = input.length();
+        } else if (cursor == 0) {
+            out = pieceTable.Insert(pieceTable.getCurrent_piece().getPrevious(), piece);
+//                            cursor = 0;
+//                            pieceTable.setCurrent_piece(out.getNext());
+        } else if (cursor > 0 && cursor < pieceTable.getCurrent_piece().getData().getLength()) {
+            int startPoint = pieceTable.getCurrent_piece().getData().getStart();
+            int endPoint = pieceTable.getCurrent_piece().getData().getEnd();
+            PieceInfo preInfo = new PieceInfo(startPoint, cursor, PieceType.Added);
+            PieceInfo nextInfo = new PieceInfo(cursor + startPoint, pieceTable.getCurrent_piece().getData().getLength() - cursor, PieceType.Added);
+
+            Piece split = new Piece(pieceTable.getCurrent_piece(), pieceTable.getCurrent_piece().getNext(), nextInfo);
+            pieceTable.Insert(pieceTable.getCurrent_piece(), split);
+
+            pieceTable.getCurrent_piece().setData(preInfo);
+
+
+            out = pieceTable.Insert(pieceTable.getCurrent_piece(), piece);
+
+            pieceTable.setCurrent_piece(out.getNext());
+            cursor = 0;
+
+        } else if (cursor == pieceTable.getCurrent_piece().getData().getLength()) {
+            out = pieceTable.Insert(pieceTable.getCurrent_piece(), piece);
+            pieceTable.setCurrent_piece(out);
+            cursor = input.length();
+        }
+
+        trieTree.root = new TrieNode();
+        String[] arrayLine = input.split("\n");
+        for (String i :arrayLine) {
+            String[] array = i.split(" ");
+            for (String j : array) {
+                trieTree.insert(j);
+            }
+        }
+
+        String pre = "";
+        if (pieceTable.getAdditional_buffer() != null) {
+            pre = pieceTable.getAdditional_buffer();
+        }
+        pieceTable.setAdditional_buffer(pre + input);
+        return cursor;
+    }
+
+    private static int endLine(int cursor, PieceTable pieceTable) {
+        int startB = pieceTable.getCurrent_piece().getData().getStart();
+        int endB = pieceTable.getCurrent_piece().getData().getEnd();
+        int cursorB = cursor;
+        if (cursorB == pieceTable.getCurrent_piece().getData().getLength()){
+            return cursor;
+        }
+        while (pieceTable.getAdditional_buffer().substring(startB,endB+1).charAt(cursorB) != '\n') {
+            cursorB = forwardCursor(cursorB, pieceTable);
+            startB = pieceTable.getCurrent_piece().getData().getStart();
+            endB = pieceTable.getCurrent_piece().getData().getEnd();
+            if (cursorB == pieceTable.getCurrent_piece().getData().getLength()){
+                break;
+            }
+        }
+        cursor = cursorB;
+        return cursor;
+    }
+
+    private static int beginLine(int cursor, PieceTable pieceTable) {
+        int startA = pieceTable.getCurrent_piece().getData().getStart();
+        int endA = pieceTable.getCurrent_piece().getData().getEnd();
+        int cursorA = cursor;
+
+
+//        if (cursorA == pieceTable.getCurrent_piece().getData().getLength() && pieceTable.getCurrent_piece().getNext() == null){
+//            cursorA = backCursor(cursorA, pieceTable);;
+//        }
+//        else if (pieceTable.getAdditional_buffer().substring(startA,endA+1).charAt(cursorA-1) == '\n'){
+//            cursorA = backCursor(cursorA, pieceTable);;
+//        }
+
+
+        while (pieceTable.getAdditional_buffer().substring(startA,endA+1).charAt(cursorA-1) != '\n') {
+            if (cursorA <= 0 && pieceTable.getCurrent_piece().getPrevious() == null){
+                break;
+            }
+            cursorA = backCursor(cursorA, pieceTable);
+            startA = pieceTable.getCurrent_piece().getData().getStart();
+            endA = pieceTable.getCurrent_piece().getData().getEnd();
+        }
+        if (cursorA == 0 && pieceTable.getCurrent_piece().getPrevious() == null){
+            cursorA--;
+        }
+        cursor = cursorA+1;
+        return cursor;
     }
 
     private static int forwardCursor(int cursor, PieceTable pieceTable) {
@@ -518,68 +451,3 @@ public class Vim {
 
 }
 
-//public class Vim {
-//
-//    private static Vim vim_instance = null;
-//
-//    private Vim(Mode selectedMode) {
-//        this.selectedMode = selectedMode;
-//    }
-//
-//    public static Vim getInstance() {
-//        if (vim_instance == null)
-//            vim_instance = new Vim(Mode.command);
-//
-//        return vim_instance;
-//    }
-//
-//    private Mode selectedMode;
-//
-//    public void selectMode(char mode) {
-//        switch (mode) {
-//            case 'c':
-//                this.selectedMode = Mode.command;
-//                break;
-//            case 'i':
-//                selectedMode = Mode.insert;
-//                break;
-//            case 's':
-//                selectedMode = Mode.statics;
-//                break;
-//        }
-//    }
-//
-//    public void get_command(String command, int num) {
-//        switch (command) {
-//
-//        }
-//    }
-//
-//    public static void main(String[] args) {
-//        int cursor = 0;
-//
-//        Scanner scanner = new Scanner(System.in);
-//        PieceTable pieceTable = new PieceTable();
-//        while (true) {
-//            String input = scanner.next();
-//
-//            switch (input) {
-//                case "<":
-//                    cursor--;
-//                    break;
-//                case ">":
-//                    cursor++;
-//                    break;
-//            }
-//
-//            for (char i : input.toCharArray()) {
-//                pieceTable.texts.add(i);
-//                cursor++;
-//            }
-//            System.out.println(Arrays.toString(pieceTable.texts.toArray()) + "\n" + cursor);
-//        }
-//
-//    }
-//}
-//
-//}
