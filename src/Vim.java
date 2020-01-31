@@ -158,11 +158,18 @@ public class Vim {
                     case ":D":
                         int currentPos = cursor;
                         Piece currentPiecePos = pieceTable.getCurrent_piece();
-
                         cursor = endLine(cursor, pieceTable);
                         int endOfLineB = cursor;
-
                         Piece endPieceB = pieceTable.getCurrent_piece();
+
+                        Piece iteratorB = currentPiecePos;
+                        while (iteratorB != endPieceB && iteratorB.getNext() != null) {
+                            Piece next = iteratorB.getNext();
+                            pieceTable.Delete(iteratorB);
+                            iteratorB = next;
+                        }
+//                        pieceTable.getCurrent_piece().getData().setLength(pieceTable.getCurrent_piece().getData().getStart()-endOfLineB);
+//                        pieceTable.getCurrent_piece().getData().setStart(pieceTable.getCurrent_piece().getData().getStart()+endOfLineB);
                         break;
                     case ":y":
                         Piece saveState = pieceTable.getCurrent_piece();
