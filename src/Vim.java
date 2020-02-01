@@ -237,43 +237,54 @@ public class Vim {
                         cursor = insertText(cursor,pieceTable,trieTree,clipBoard);
                         break;
                     case "/":
+                        if (pieceTable.getAdditional_buffer().charAt(pieceTable.getEnd_list().getData().getEnd()) != '\n') {
+                        Piece save = pieceTable.getCurrent_piece();
+                        int save_cursor = cursor;
+                        pieceTable.setCurrent_piece(pieceTable.getEnd_list());
+                        cursor = pieceTable.getCurrent_piece().getData().getLength();
+                        cursor = insertText(cursor, pieceTable, trieTree, "\n");
+                        pieceTable.setCurrent_piece(save);
+                        cursor = save_cursor;
+                    }
+
                         String find = scanner.next();
                         Piece iterate = pieceTable.First();
+                        int startF = iterate.getData().getStart();
+                        int endF = iterate.getData().getEnd();
+                        int line_counter = 0;
+                        int number_occur = 0;
+
+                        trieTree.root = new TrieNode();
+
                         while (iterate != null){
                             int counterF = 0;
-                            int line_counter = 0;
-                            int startF = iterate.getData().getStart();
-                            int endF = iterate.getData().getEnd();
+                            int save_counter = counterF;
                             while (counterF < iterate.getData().getLength()) {
-                                if (pieceTable.getAdditional_buffer().substring(startF, startF + 1).charAt(counterF) == '\n') {
+                                if (pieceTable.getAdditional_buffer().substring(startF, endF + 1).charAt(counterF) == ' ' || pieceTable.getAdditional_buffer().substring(startF, endF + 1).charAt(counterF) == '\n') {
+                                    trieTree.insert(pieceTable.getAdditional_buffer().substring(startF + save_counter, startF + counterF));
+//                                    System.out.println((pieceTable.getAdditional_buffer().substring(startF + save_counter, startF + counterF)));
+                                    save_counter = counterF+1;
+                                }
+                                if (pieceTable.getAdditional_buffer().substring(startF, endF + 1).charAt(counterF) == '\n') {
+                                    if (trieTree.search(find)) {
+                                        System.err.println(find + " : " +(line_counter+1));
+                                        number_occur++;
+                                    }
                                     line_counter++;
+                                    trieTree.root = new TrieNode();
                                 }
                                 counterF++;
                             }
-
-//                            String[] arrayLine = pieceTable.getAdditional_buffer().substring(iterate.getData().getStart(),iterate.getData().getEnd()+1).split("\n");
-//                            for (String i : arrayLine) {
-//                                trieTree.root = new TrieNode();
-//                                String[] array = i.split(" ");
-//                                for (String j : array) {
-//                                    trieTree.insert(j);
-//                                }
-//                                if (trieTree.search(find)){
-//                                    System.out.println();
-//                                }
-//                            }
-//                            iterate = iterate.getNext();
-//                            if (iterator != null) {
-//                                startV = iterator.getData().getStart();
-//                                endV = iterator.getData().getEnd();
-//                            }
+//                            System.out.println((pieceTable.getAdditional_buffer().substring(startF + save_counter, startF + counterF)));
+                            trieTree.insert(pieceTable.getAdditional_buffer().substring(startF + save_counter, startF + counterF));
+                            iterate = iterate.getNext();
+                            if (iterate != null) {
+                                startF = iterate.getData().getStart();
+                                endF = iterate.getData().getEnd();
+                            }
                         }
+//                        System.out.println(number_occur);
 
-                        if (trieTree.search(find)) {
-                            System.out.println(find + " is in your text!");
-                        } else {
-                            System.out.println(find + " is not in your text!");
-                        }
                         break;
                     default:
                         System.out.println("Command Not Found");
