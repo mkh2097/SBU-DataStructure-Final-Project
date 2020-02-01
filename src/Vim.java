@@ -203,6 +203,7 @@ public class Vim {
                         pieceTable.getCurrent_piece().getData().setStart(pieceTable.getCurrent_piece().getData().getStart()+endOfLineB);
                         break;
                     case ":y":
+                        clipBoard = "";
                         Piece saveState = pieceTable.getCurrent_piece();
                         int saveCursor = cursor;
 
@@ -229,7 +230,7 @@ public class Vim {
 
                         pieceTable.setCurrent_piece(saveState);
                         cursor = saveCursor;
-                        System.err.println(clipBoard);
+//                        System.err.println(clipBoard);
 
                         break;
                     case ":p":
@@ -364,22 +365,22 @@ public class Vim {
 
             String out = "";
             while (temp != null) {
-
-
-                String o = pieceTable.getAdditional_buffer().substring(temp.getData().getStart(), temp.getData().getEnd() + 1);
-
-                if (temp.equals(pieceTable.getCurrent_piece())) {
-                    if (pieceTable.getCurrent_piece().getData().getLength() != cursor) {
-                        System.err.println(pieceTable.getCurrent_piece().getData().getLength());
-                        o = o.substring(0, cursor) + "*" + o.substring(cursor);
-                    } else {
-                        o = o + "*";
+                    String o = pieceTable.getAdditional_buffer().substring(temp.getData().getStart(), temp.getData().getEnd() + 1);
+                    if (temp.equals(pieceTable.getCurrent_piece())) {
+                        if (pieceTable.getCurrent_piece().getData().getLength() != cursor) {
+//                            System.err.println(pieceTable.getCurrent_piece().getData().getLength());
+                            o = o.substring(0, cursor) + "*" + o.substring(cursor);
+                        } else {
+                            o = o + "*";
+                        }
                     }
-                }
-                out = out + o;
-                temp = temp.getNext();
+                    out = out + o;
+                    temp = temp.getNext();
+
+
             }
             System.out.println(out);
+
 
         }
     }
