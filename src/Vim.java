@@ -380,7 +380,7 @@ public class Vim {
 
             }
             System.out.println(out);
-
+//            System.err.println(cursor);
 
         }
     }
@@ -389,14 +389,18 @@ public class Vim {
         int startD = pieceTable.getCurrent_piece().getData().getStart();
         int endD = pieceTable.getCurrent_piece().getData().getEnd();
         int cursorD = cursor;
-        try {
+//        try {
 
             if (cursorD == pieceTable.getCurrent_piece().getData().getLength() && pieceTable.getCurrent_piece().getNext() == null) {
                 cursorD = backCursor(cursorD, pieceTable);
-                ;
             } else if (pieceTable.getAdditional_buffer().substring(startD, endD + 1).charAt(cursorD) == ' ' || pieceTable.getAdditional_buffer().substring(startD, endD + 1).charAt(cursorD) == '\n') {
                 cursorD = backCursor(cursorD, pieceTable);
-                ;
+
+            }
+            try {
+                char a = (pieceTable.getAdditional_buffer().substring(startD, endD + 1).charAt(cursorD));
+            }catch (Exception a){
+                backCursor(cursorD,pieceTable);
             }
             while (pieceTable.getAdditional_buffer().substring(startD, endD + 1).charAt(cursorD) != ' ' && pieceTable.getAdditional_buffer().substring(startD, endD + 1).charAt(cursorD) != '\n') {
 
@@ -408,13 +412,14 @@ public class Vim {
                 }
             }
             if (cursorD == 0 && pieceTable.getCurrent_piece().getPrevious() == null) {
-                cursorD--;
+                backCursor(cursorD,pieceTable);
             }
-            cursor = cursorD + 1;
-        } catch (Exception e) {
-            cursor = 0;
-            pieceTable.setCurrent_piece(pieceTable.First());
-        }
+            cursor = forwardCursor(cursorD,pieceTable);
+//        } catch (Exception e) {
+//            cursor = 0;
+//            pieceTable.setCurrent_piece(pieceTable.First());
+//
+//        }
         return cursor;
     }
 
@@ -430,11 +435,11 @@ public class Vim {
             startC = pieceTable.getCurrent_piece().getData().getStart();
             endC = pieceTable.getCurrent_piece().getData().getEnd();
             if (cursorC == pieceTable.getCurrent_piece().getData().getLength()) {
-                cursorC--;
+                backCursor(cursorC,pieceTable);
                 break;
             }
         }
-        cursor = cursorC + 1;
+        cursor = forwardCursor(cursorC,pieceTable);
         return cursor;
     }
 
@@ -519,7 +524,7 @@ public class Vim {
     }
 
     private static int beginLine(int cursor, PieceTable pieceTable) {
-        try {
+//        try {
             int cursorA = cursor;
             if (cursorA == 0 && pieceTable.getCurrent_piece().getPrevious() == null || (cursor == -1)) {
                 pieceTable.setCurrent_piece(pieceTable.First());
@@ -555,11 +560,12 @@ public class Vim {
             }
 //        System.out.println(cursorA);
 
-            cursor = cursorA + 1;
-        } catch (Exception e) {
-            cursor = 0;
-            pieceTable.setCurrent_piece(pieceTable.First());
-        }
+            cursor = forwardCursor(cursorA,pieceTable);
+//        } catch (Exception e) {
+//            System.err.println("error");
+//            cursor = 0;
+//            pieceTable.setCurrent_piece(pieceTable.First());
+//        }
         return cursor;
     }
 
