@@ -193,14 +193,30 @@ public class Vim {
                         int endOfLineB = cursor;
                         Piece endPieceB = pieceTable.getCurrent_piece();
 
-                        Piece iteratorB = currentPiecePos;
-                        while (iteratorB != endPieceB && iteratorB.getNext() != null) {
-                            Piece next = iteratorB.getNext();
-                            pieceTable.Delete(iteratorB);
-                            iteratorB = next;
+                        System.out.println(currentPos);
+                        System.out.println(endOfLineB);
+                        System.out.println(pieceTable.getAdditional_buffer().length());
+                        if (currentPiecePos.equals(endPieceB)){
+                            PieceInfo pi = new PieceInfo(currentPiecePos.getData().getStart()+endOfLineB,currentPiecePos.getData().getLength()-endOfLineB,PieceType.Added);
+                            Piece in = new Piece(null,null,pi);
+                            pieceTable.Insert(currentPiecePos,in);
+                            currentPiecePos.getData().setLength(currentPos);
+                            cursor = currentPos;
+                            System.out.println(pieceTable.getCurrent_piece().getPrevious().getData().getStart());
+                            System.out.println(pieceTable.getCurrent_piece().getData().getLength());
+                            System.out.println(pieceTable.getCurrent_piece().getNext().getData().getEnd());
+                        }else {
+                            currentPiecePos.getData().setLength(currentPos);
+                            Piece iteratorB = currentPiecePos.getNext();
+                            while (iteratorB != endPieceB) {
+                                Piece next = iteratorB.getNext();
+                                pieceTable.Delete(iteratorB);
+                                iteratorB = next;
+                            }
+                            iteratorB.getData().setLength(pieceTable.getCurrent_piece().getData().getLength() - endOfLineB);
+                            iteratorB.getData().setStart(pieceTable.getCurrent_piece().getData().getStart() + endOfLineB);
+                            cursor = 0;
                         }
-                        pieceTable.getCurrent_piece().getData().setLength(pieceTable.getCurrent_piece().getData().getStart()-endOfLineB);
-                        pieceTable.getCurrent_piece().getData().setStart(pieceTable.getCurrent_piece().getData().getStart()+endOfLineB);
                         break;
                     case ":y":
                         clipBoard = "";
@@ -368,7 +384,7 @@ public class Vim {
                     String o = pieceTable.getAdditional_buffer().substring(temp.getData().getStart(), temp.getData().getEnd() + 1);
                     if (temp.equals(pieceTable.getCurrent_piece())) {
                         if (pieceTable.getCurrent_piece().getData().getLength() != cursor) {
-//                            System.err.println(pieceTable.getCurrent_piece().getData().getLength());
+                            System.err.println(cursor);
                             o = o.substring(0, cursor) + "*" + o.substring(cursor);
                         } else {
                             o = o + "*";
