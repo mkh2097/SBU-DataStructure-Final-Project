@@ -1,4 +1,3 @@
-import java.util.LinkedList;
 
 public class TrieTree {
 
@@ -59,34 +58,19 @@ public class TrieTree {
         return p != null && p.isWord;
     }
 
-     TrieNode findLongest() {
-        LinkedList<TrieNode> queue = new LinkedList<>();
-        queue.push(root);
-        TrieNode current = null;
-        while (!queue.isEmpty()) {
-            current = queue.pop();
-            if (current.children != null) {
-                for (TrieNode children : current.children) {
-                    queue.push(children);
-                }
-            }
-        }
-        return current;
 
-
-    }
 }
 
-    class TrieNode {
+class TrieNode {
 
-        static final int SIZE = 300;
-        TrieNode[] children = new TrieNode[SIZE];
-        boolean isWord;
+    static final int SIZE = 300;
+    TrieNode[] children = new TrieNode[SIZE];
+    boolean isWord;
 
-        public TrieNode() {
-            isWord = false;
-            for (int i = 0; i < SIZE; i++) {
-                children[i] = null;
-            }
+    public TrieNode() {
+        isWord = false;
+        for (int i = 0; i < SIZE; i++) {
+            children[i] = null;
         }
     }
+}

@@ -4,38 +4,6 @@ enum Mode {
     command, insert, statics
 }
 
-enum CommandActions {
-    right,
-    left,
-    up,
-    down,
-    begin_file,
-    begin_line,
-    end_file,
-    end_line,
-    line_select,
-    next_word,
-    prev_word,
-    n_next_word,
-    n_prev_word,
-    erase_line,
-    erase_cursor,
-    copy,
-    paste,
-    undo,
-    n_undo,
-    redo,
-    search,
-    replace
-}
-
-enum InsertActions {
-    right,
-    left,
-    up,
-    down,
-    escape
-}
 
 public class Vim {
     public static void insert(String val, String[] arr) {
@@ -79,6 +47,8 @@ public class Vim {
         for (int i = 0; i < shortestWords.length; i++) {
             shortestWords[i] = "############################################################################################################################################################";
         }
+        cursor = insertText(cursor,pieceTable,trieTree,pieceTable.getOriginal_buffer());
+        pieceTable.getCurrent_piece().getData().setType(PieceType.Original);
 
         while (true) {
             if (vim_mode == Mode.command) {
@@ -150,6 +120,31 @@ public class Vim {
                         }
                         cursor = cursorE;
 
+//                        int line_number = scanner.nextInt();
+//                        Piece iterateL = pieceTable.First();
+//                        int startL = iterateL.getData().getStart();
+//                        int endL = iterateL.getData().getEnd();
+//                        int line_counterL = 0;
+//
+//
+//                        while (iterateL != null) {
+//                            int counterL = 0;
+//                            while (counterL < iterateL.getData().getLength()) {
+//                                if (pieceTable.getAdditional_buffer().substring(startL, endL + 1).charAt(counterL) == '\n') {
+//                                    line_counterL++;
+//                                }
+//                                counterL++;
+//                            }
+//                            if (line_number == line_counterL){
+//                                cursor = counterL;
+//                                break;
+//                            }
+//                            iterateL = iterateL.getNext();
+//                            if (iterateL != null) {
+//                                startL = iterateL.getData().getStart();
+//                                endL = iterateL.getData().getEnd();
+//                            }
+//                        }
                         break;
                     case ":dd":
                         cursor = beginLine(cursor, pieceTable);
@@ -163,7 +158,7 @@ public class Vim {
 
                         Piece iterator = beginPiece.getNext();
 
-                        while (iterator != endPiece && iterator.getNext() != null) {
+                        while (iterator!= null && iterator != endPiece && iterator.getNext() != null) {
 //                            System.out.println(iterator.getPrevious());
 //                            System.out.println(iterator);
 //                            System.out.println(iterator.getNext());
@@ -183,8 +178,8 @@ public class Vim {
                         cursor = insertText(cursor, pieceTable, trieTree, "\n");
                         cursor = backCursor(cursor, pieceTable);
 
-                        System.err.println("Now: " + pieceTable.getCurrent_piece().getData().getLength());
-                        System.err.println("Pre: " + pieceTable.getCurrent_piece().getPrevious().getData().getLength());
+//                        System.err.println("Now: " + pieceTable.getCurrent_piece().getData().getLength());
+//                        System.err.println("Pre: " + pieceTable.getCurrent_piece().getPrevious().getData().getLength());
 //                        beginPiece.getData().setLength(beginningOfLine);
 //                        System.err.println("Start: "+endPiece.getData().getStart());
 //                        System.err.println("Length "+endPiece.getData().getLength());
@@ -204,8 +199,8 @@ public class Vim {
                             pieceTable.Delete(iteratorB);
                             iteratorB = next;
                         }
-//                        pieceTable.getCurrent_piece().getData().setLength(pieceTable.getCurrent_piece().getData().getStart()-endOfLineB);
-//                        pieceTable.getCurrent_piece().getData().setStart(pieceTable.getCurrent_piece().getData().getStart()+endOfLineB);
+                        pieceTable.getCurrent_piece().getData().setLength(pieceTable.getCurrent_piece().getData().getStart()-endOfLineB);
+                        pieceTable.getCurrent_piece().getData().setStart(pieceTable.getCurrent_piece().getData().getStart()+endOfLineB);
                         break;
                     case ":y":
                         Piece saveState = pieceTable.getCurrent_piece();

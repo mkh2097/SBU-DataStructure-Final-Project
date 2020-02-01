@@ -1,15 +1,18 @@
-import java.util.List;
 
 class PieceTable {
 
-    private List<Character> original_buffer;
-    private List<Character> additional_buffer_;
+
     private String additional_buffer;
+    private String original_buffer = "This is Sbu Project\n";
 
     private int NOE;
     private Piece list;
     private Piece end_list;
     private Piece current_piece;
+
+    public String getOriginal_buffer() {
+        return original_buffer;
+    }
 
     public String getAdditional_buffer() {
         return additional_buffer;
