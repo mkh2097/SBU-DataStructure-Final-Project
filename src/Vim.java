@@ -377,7 +377,7 @@ public class Vim {
                     String o = pieceTable.getAdditional_buffer().substring(temp.getData().getStart(), temp.getData().getEnd() + 1);
                     if (temp.equals(pieceTable.getCurrent_piece())) {
                         if (pieceTable.getCurrent_piece().getData().getLength() != cursor) {
-                            System.err.println(cursor);
+//                            System.err.println(cursor);
                             o = o.substring(0, cursor) + "*" + o.substring(cursor);
                         } else {
                             o = o + "*";
