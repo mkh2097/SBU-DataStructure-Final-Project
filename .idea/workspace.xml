@@ -3,14 +3,16 @@
   <component name="ChangeListManager">
     <list default="true" id="1e4e0f49-3b5a-42a5-be89-7262e74f0905" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/DS-Alternative/Vim.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/DS-Alternative/Vim.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Vim.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Vim.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TrieTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrieTree.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="DS-Alternative" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">

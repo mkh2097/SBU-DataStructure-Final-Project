@@ -55,7 +55,7 @@ public class TrieTree {
 
             p = p.children[index];
         }
-        return p != null && p.isWord;
+        return p != null ;
     }
 
 
